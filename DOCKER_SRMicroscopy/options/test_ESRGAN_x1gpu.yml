@@ -1,0 +1,47 @@
+name: test_esrgan
+model_type: ESRGANModel
+scale: 4
+num_gpu: 0  # set to 0 for CPU mode, or >0 for GPU
+
+#datasets:
+#  test_1:
+#    name: tubulin_test_set
+
+datasets:
+  test_1:
+    name: test_dataset
+    type: PairedImageDataset
+    dataroot_gt: ./datasets/WF/test_set
+    dataroot_lq: ./datasets/WF/test_set
+    io_backend:
+      type: disk
+
+# network structures
+network_g:
+  type: RRDBNet
+  num_in_ch: 3
+  num_out_ch: 3
+  num_feat: 64
+  num_block: 32
+  num_grow_ch: 32
+
+# path
+path:
+  results_root: /output
+  pretrain_network_g: ./experiments/pretrained_models/net_g_latest.pth
+  strict_load_g: true
+
+# validation settings
+val:
+  save_img: true
+  suffix: ~  # add suffix to saved images, if None, use exp name
+ 
+metrics:
+  psnr:
+    type: calculate_psnr
+    crop_border: 4
+    test_y_channel: false
+  ssim:
+    type: calculate_ssim
+    crop_border: 4
+    test_y_channel: false

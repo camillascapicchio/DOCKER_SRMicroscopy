@@ -1,0 +1,82 @@
+{
+    "name": "srgan",
+    "label": "srgan",
+    "description": "Runs ESRGAN on PNG resource",
+    "version": "1.5",
+    "schema-version": "1.0",
+    "info-url": "https://github.com/camillascapicchio/SR_Microscopy",
+    "image": "camillascapicchio/srgan:1",
+    "type": "docker",
+    "command-line": "/input /output",
+    "mounts": [
+      {
+        "name": "png-in",
+        "writable": false,
+        "path": "/input"
+      },
+      {
+        "name": "png-out",
+        "writable": true,
+        "path": "/output"
+      }
+    ],
+    "environment-variables": {},
+    "ports": {},
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "output_png",
+        "description": "The output SR image file",
+        "required": true,
+        "mount": "png-out"
+      }
+    ],
+    "xnat": [
+      {
+        "name": "srgan",
+        "label": "srgan",
+        "description": "Run ESRGAN on LR png",
+        "contexts": [
+          "xnat:imageSessionData"
+        ],
+        "external-inputs": [
+          {
+            "name": "experiment",
+            "description": "Input experiment",
+            "type": "Session",
+            "matcher": "'LRimages' in @.resources[*].label",
+            "required": true,
+            "load-children": true
+          }
+        ],
+        "derived-inputs": [
+          {
+            "name": "input_png_folder",
+            "description": "The resource folder containing inpput png",
+            "type": "Resource",
+            "matcher": "@.label == 'LRimages'",
+            "required": true,
+            "provides-files-for-command-mount": "png-in",
+            "load-children": true,
+            "derived-from-wrapper-input": "experiment",
+            "multiple": false
+          }
+        ],
+        "output-handlers": [
+          {
+            "name": "output-resource",
+            "accepts-command-output": "output_png",
+            "as-a-child-of": "experiment",
+            "type": "Resource",
+            "label": "SRimage",
+            "tags": []
+          }
+        ]
+      }
+    ],
+    "container-labels": {},
+    "generic-resources": {},
+    "ulimits": {},
+    "secrets": [],
+    "visibility": "public"
+  }
