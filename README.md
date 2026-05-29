@@ -12,7 +12,8 @@ docker run --rm \
 
 ### Original codes at: https://github.com/camillascapicchio/SR_Microscopy 
 ### Other info at: https://github.com/SimLoss/-Single-image-super-resolution-microscopy-
-### DockerHub repository: camillascapicchio/srgan:1
+### DockerHub repository: camillascapicchio/srgan:1 -> per architettura Mac
+### DockerHub repository: camillascapicchio/srgan:amd64 -> per architettura linux
 
 ## Citation
 
